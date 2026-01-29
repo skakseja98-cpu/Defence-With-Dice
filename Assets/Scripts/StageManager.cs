@@ -1,29 +1,48 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StageManager : MonoBehaviour
 {
-    public int stageLevel = 1;
+    public int[] stageLevel = {1, 2, 3};
     public GameObject enemyPrefab;
     public GameObject bossPrefab;
     public GameObject dicePrefab;
     public Transform[] spawnPoints;
 
-    private float timer = 0f;
+    public float timer = 0f;
     private bool bossSpawned = false;
+    private float bossTime = 6f;
+    private int currentStageIndex = 0;
+
+
+    void Start()
+    {
+        Debug.Log(currentStageIndex);
+    }
 
     void Update()
     {
-        if (timer < 30f)
+        if (timer <= bossTime && !bossSpawned)
         {
             timer += Time.deltaTime;
             // 예: 3초마다 잡몹 생성
             if (Mathf.FloorToInt(timer) % 3 == 0 && !IsInvoking("SpawnEnemy")) 
                 Invoke("SpawnEnemy", 0.4f);
         }
-        else if (!bossSpawned)
-        {
+        else if (timer > bossTime && !bossSpawned)
+        {   
+            CancelInvoke("SpawnEnemy");
             SpawnBoss();
+        }
+
+        if (bossSpawned)
+        {
+            if (GameObject.FindWithTag("Boss") == null)
+            {
+                bossSpawned = false;
+                Debug.Log("보스 처치!");
+            }
         }
     }
 
@@ -44,7 +63,7 @@ public class StageManager : MonoBehaviour
     public void OnBossDeath(Vector3 deathPosition)
     {
         Debug.Log($"{stageLevel}개의 주사위 생성!");
-        for (int i = 0; i < stageLevel * 3; i++)
+        for (int i = 0; i < currentStageIndex * 3; i++)
         {
             Vector3 spawnPos = deathPosition + new Vector3(Random.Range(-2f, 2f), 1f, Random.Range(-2f, 2f));
             Instantiate(dicePrefab, spawnPos, Quaternion.identity);

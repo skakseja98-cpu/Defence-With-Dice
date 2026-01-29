@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0614c353177717a44858c18c27b1f67a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  bulletSpeed: 300
-  bulletDamage: 5
+  bulletSpeed: 200
+  bulletDamage: 10
   hitParticlePrefab: {fileID: 7764331613119361377, guid: 0d865e9b2ecf7614987252e92e5a04d2, type: 3}
 --- !u!114 &-5453888756929008125
 MonoBehaviour:
